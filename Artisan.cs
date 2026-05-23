@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 namespace Artisan
 {
-    [BepInPlugin("gamedroit.artisan", "Artisan", "1.0.0")]
+    [BepInPlugin("gamedroit.artisan", "Artisan", "1.0.1")]
     public sealed class ArtisanMod : BaseUnityPlugin
     {
         internal new static ManualLogSource Logger { get; private set; }
@@ -33,6 +33,10 @@ namespace Artisan
         public static ConfigEntry<bool> EnableExtendedInventorySlots;
         public static ConfigEntry<int> MaxInventorySlots;
 
+        public static ConfigEntry<bool> EnableShowMonstersHealthBar;
+        public static ConfigEntry<bool> EnableShowMonsterDamageIndicator;
+        public static ConfigEntry<float> MonsterHealthBarExtraHeightOffset;
+
         public void Awake()
         {
             Logger = base.Logger;
@@ -51,6 +55,10 @@ namespace Artisan
 
             EnableExtendedInventorySlots = Config.Bind("Inventory", "Enable Extended Inventory Slots", true, "Enable or disable increasing the inventory from 3 to 6 slots.");
             MaxInventorySlots = Config.Bind("Inventory", "Max Inventory Slots", 6, "Maximum inventory slots. Vanilla is 3. Recommended value is 6.");
+
+            EnableShowMonstersHealthBar = Config.Bind("UI", "Enable Show Monsters Health Bar", true, "Enable or disable showing monsters' health bars.");
+            EnableShowMonsterDamageIndicator = Config.Bind("UI", "Enable Show Monster Damage Indicator", true, "Enable or disable showing damage indicators on monsters.");
+            MonsterHealthBarExtraHeightOffset = Config.Bind("UI", "Monster Health Bar Extra Height Offset", 0.45f, "Additional height offset for monster health bars to prevent overlap with the monster's model.");
 
             harmony = new Harmony("gamedroit.artisan");
 
