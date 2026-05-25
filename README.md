@@ -130,4 +130,4 @@ Inventory slot implementation inspired by:
 
 ### Author
 
-Created by **Gamedroit**
+Created by **Gamedroit** also known as **Hadaward**.
