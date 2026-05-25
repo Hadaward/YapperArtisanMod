@@ -1,0 +1,7 @@
+{
+  "name": "Artisan",
+  "version_number": "1.0.1",
+  "website_url": "https://github.com/Hadaward/YapperArtisanMod",
+  "description": "A general-purpose quality of life mod, highlights include inventory extension support, the addition of a health bar and damage indicators that work in multiplayer, and added damage to the Aero and Teleblast spells.",
+  "dependencies": []
+}
