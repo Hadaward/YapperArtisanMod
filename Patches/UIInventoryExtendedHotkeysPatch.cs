@@ -35,6 +35,9 @@ namespace Artisan.Patches
 
             for (int i = 3; i < maxSlots && i < 8; i++)
             {
+                if (!ArtisanInventoryUpgradeService.IsSlotUnlocked(playerInventory, i))
+                    continue;
+
                 if (!UnityEngine.Input.GetKeyDown(SlotKeys[i - 3]))
                     continue;
 

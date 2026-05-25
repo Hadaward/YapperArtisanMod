@@ -35,6 +35,7 @@
   <ItemGroup>
     <None Include="manifest.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="README.md" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="icon.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -77,6 +78,10 @@
       <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
       <Private>False</Private>
@@ -112,8 +117,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Artisan.cs" />
+    <Compile Include="Localization\ArtisanText.cs" />
     <Compile Include="Localization\Localization.cs" />
     <Compile Include="Localization\VoiceCommand.cs" />
+    <Compile Include="Patches\ArtisanInventoryLockedSlotPatch.cs" />
+    <Compile Include="Patches\ArtisanInventoryUpgradeEffects.cs" />
+    <Compile Include="Patches\ArtisanInventoryUpgradeNetwork.cs" />
+    <Compile Include="Patches\ArtisanInventoryUpgradeService.cs" />
+    <Compile Include="Patches\ArtisanInventoryUpgradeStationInteractPatch.cs" />
+    <Compile Include="Patches\ArtisanInventoryUpgradeStationPatch.cs" />
+    <Compile Include="Patches\ArtisanLockedSlotOverlayPatch.cs" />
     <Compile Include="Patches\InventoryPersistencePatch.cs" />
     <Compile Include="Patches\NpcHurtboxClientHitFxPatch.cs" />
     <Compile Include="Patches\UIInventoryExtendedHotkeysPatch.cs" />
@@ -121,11 +134,9 @@
     <Compile Include="Patches\InventorySlotLimitPatch.cs" />
     <Compile Include="Patches\ProjectilePushDamagePatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Spells\SpellRegistry.cs" />
     <Compile Include="UI\ArtisanDamageText3D.cs" />
     <Compile Include="UI\ArtisanDamageTextFactory.cs" />
     <Compile Include="UI\ArtisanEnemyHealthBar.cs" />
-    <Compile Include="Utilities\AssetLoader.cs" />
     <Compile Include="Utilities\HarmonyUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

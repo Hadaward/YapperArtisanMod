@@ -12,16 +12,18 @@ namespace Artisan.Patches
         private const int Columns = 3;
         private const float SelectedItemNameFontSize = 18f;
 
-        private static readonly Vector2 GridOffset = new Vector2(-34f, 14f);
-        private static readonly Vector2 NameOffset = new Vector2(0f, 42f);
+        private static readonly Vector2 GridOrigin = new Vector2(-34f, 20f);
+        private static readonly Vector2 SlotSpacing = new Vector2(46f, 52f);
 
-        private static readonly Vector2 SlotFramePadding = new Vector2(10f, 10f);
-        private static readonly Vector2 SlotVisualSpacing = new Vector2(2f, 8f);
-        private static readonly Vector2 SlotNumberOffset = new Vector2(0f, -6f);
-        private static readonly Vector2 SlotFrameOffset = new Vector2(0f, 0f);
-        private static readonly Vector2 LeftHandExtraOffset = new Vector2(-6f, -2f);
+        private static readonly Vector2 SlotFrameSizeOffset = new Vector2(1f, 1f);
+
+        private static readonly Vector2 SlotNumberPosition = new Vector2(0f, -24f);
+
+        private static readonly Vector2 LeftHandOffset = new Vector2(-48f, -26f);
+        private static readonly Vector2 LeftHandFrameSizeOffset = new Vector2(1f, 1f);
 
         private static readonly Vector2 PromptContainerOffset = new Vector2(-70f, 20f);
+        private static readonly Vector2 NameOffset = new Vector2(0f, 42f);
 
         private static void Postfix(UIInventory __instance)
         {
@@ -31,88 +33,160 @@ namespace Artisan.Patches
             if (__instance == null)
                 return;
 
-            UIInventorySlot[] slots =
-                HarmonyUtil.GetFieldValue<UIInventorySlot[]>(
-                    __instance,
-                    "inventorySlots"
-                );
+            UIInventorySlot[] slots = HarmonyUtil.GetFieldValue<UIInventorySlot[]>(
+                __instance,
+                "inventorySlots"
+            );
 
             if (slots == null || slots.Length == 0 || slots[0] == null)
                 return;
 
-            RectTransform container =
-                slots[0].transform.parent as RectTransform;
+            RectTransform container = slots[0].transform.parent as RectTransform;
 
             if (container == null)
                 return;
 
             DisableLayoutComponents(container);
-            HideInventoryBackground(__instance, container);
+            HideInventoryBackground(__instance);
 
-            RectTransform firstRect =
-                slots[0].GetComponent<RectTransform>();
+            RectTransform firstSlotRect = slots[0].GetComponent<RectTransform>();
+            Vector2 slotSize = firstSlotRect != null
+                ? firstSlotRect.sizeDelta
+                : new Vector2(36f, 36f);
 
-            Vector2 cellSize =
-                firstRect != null
-                    ? firstRect.sizeDelta
-                    : new Vector2(36f, 36f);
+            Transform frameTemplate = FindDeepChild(__instance.transform, "OffhandItem");
 
-            PositionInventorySlots(slots, cellSize);
-            CreateSlotFramesFromOffhandItem(__instance, slots, cellSize);
+            PositionInventorySlots(slots);
+            CreateSlotFramesFromSlots(__instance, slots);
 
-            MoveSlotNumbers(slots);
+            PositionSlotNumbers(slots);
 
-            PositionLeftHandSlot(__instance, container, cellSize);
-            PositionInputPrompts(__instance, container, cellSize);
+            PositionLeftHandSlot(__instance, container, slotSize, frameTemplate);
+            CreateLeftHandFrameFromSlot(__instance);
 
-            MoveSelectedItemName(__instance, container, cellSize);
+            PositionInputPrompts(__instance, container);
+            PositionSelectedItemName(__instance, container);
 
             LayoutRebuilder.MarkLayoutForRebuild(container);
         }
 
-        private static void PositionInputPrompts(UIInventory inventory, RectTransform container, Vector2 cellSize)
+        private static Vector2 GetSlotPosition(int index)
         {
-            CanvasGroup scrollGroup =
-                HarmonyUtil.GetFieldValue<CanvasGroup>(
-                    inventory,
-                    "scrollCanvasGroup"
-                );
+            int row = index / Columns;
+            int column = index % Columns;
 
-            if (scrollGroup == null)
-                return;
-
-            RectTransform promptRect =
-                scrollGroup.transform.parent as RectTransform;
-
-            if (promptRect == null)
-                return;
-
-            Vector2 frameSize = cellSize + SlotFramePadding;
-            Vector2 step = frameSize + SlotVisualSpacing;
-
-            Vector2 leftHandPosition =
-                GridOffset +
-                new Vector2(
-                    -step.x,
-                    -step.y * 0.5f
-                ) +
-                LeftHandExtraOffset;
-
-            promptRect.SetParent(container, false);
-            promptRect.anchorMin = new Vector2(0.5f, 0.5f);
-            promptRect.anchorMax = new Vector2(0.5f, 0.5f);
-            promptRect.pivot = new Vector2(0.5f, 0.5f);
-            promptRect.localScale = Vector3.one;
-            promptRect.localRotation = Quaternion.identity;
-
-            promptRect.anchoredPosition =
-                leftHandPosition +
-                PromptContainerOffset;
-
-            promptRect.SetAsLastSibling();
+            return GridOrigin + new Vector2(
+                column * SlotSpacing.x,
+                -row * SlotSpacing.y
+            );
         }
 
-        private static void MoveSlotNumbers(UIInventorySlot[] slots)
+        private static void PositionInventorySlots(UIInventorySlot[] slots)
+        {
+            for (int i = 0; i < slots.Length; i++)
+            {
+                UIInventorySlot slot = slots[i];
+
+                if (slot == null)
+                    continue;
+
+                RectTransform rect = slot.GetComponent<RectTransform>();
+
+                if (rect == null)
+                    continue;
+
+                SetCentered(rect);
+                rect.anchoredPosition = GetSlotPosition(i);
+                rect.SetSiblingIndex(i);
+            }
+        }
+
+        private static void CreateSlotFramesFromSlots(UIInventory inventory, UIInventorySlot[] slots)
+        {
+            Transform frameTemplate = FindDeepChild(inventory.transform, "OffhandItem");
+
+            if (frameTemplate == null)
+            {
+                ArtisanMod.Logger.LogWarning("OffhandItem frame template not found.");
+                return;
+            }
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                UIInventorySlot slot = slots[i];
+
+                if (slot == null)
+                    continue;
+
+                RectTransform slotRect = slot.GetComponent<RectTransform>();
+
+                if (slotRect == null || slotRect.parent == null)
+                    continue;
+
+                string frameName = "ArtisanSlotFrame_" + i;
+                Transform oldFrame = slotRect.parent.Find(frameName);
+
+                if (oldFrame != null)
+                    Object.Destroy(oldFrame.gameObject);
+
+                GameObject frameObject = Object.Instantiate(frameTemplate.gameObject, slotRect.parent);
+                frameObject.name = frameName;
+                frameObject.SetActive(true);
+
+                RectTransform frameRect = frameObject.GetComponent<RectTransform>();
+
+                if (frameRect == null)
+                    continue;
+
+                CopySlotTransform(slotRect, frameRect);
+                frameRect.sizeDelta = slotRect.sizeDelta + SlotFrameSizeOffset;
+
+                frameRect.SetSiblingIndex(slotRect.GetSiblingIndex());
+                slotRect.SetSiblingIndex(frameRect.GetSiblingIndex() + 1);
+            }
+        }
+
+        private static void CreateLeftHandFrameFromSlot(UIInventory inventory)
+        {
+            Transform frameTemplate = FindDeepChild(inventory.transform, "OffhandItem");
+
+            if (frameTemplate == null)
+                return;
+
+            UIInventorySlot leftHandSlot = HarmonyUtil.GetFieldValue<UIInventorySlot>(
+                inventory,
+                "leftHandSlot"
+            );
+
+            if (leftHandSlot == null)
+                return;
+
+            RectTransform slotRect = leftHandSlot.GetComponent<RectTransform>();
+            RectTransform frameRect = frameTemplate as RectTransform;
+
+            if (slotRect == null || frameRect == null)
+                return;
+
+            frameRect.SetParent(slotRect.parent, false);
+            CopySlotTransform(slotRect, frameRect);
+            frameRect.sizeDelta = slotRect.sizeDelta + LeftHandFrameSizeOffset;
+
+            frameTemplate.gameObject.SetActive(true);
+            frameRect.SetSiblingIndex(slotRect.GetSiblingIndex());
+            slotRect.SetSiblingIndex(frameRect.GetSiblingIndex() + 1);
+        }
+
+        private static void CopySlotTransform(RectTransform source, RectTransform target)
+        {
+            target.anchorMin = source.anchorMin;
+            target.anchorMax = source.anchorMax;
+            target.pivot = source.pivot;
+            target.anchoredPosition = source.anchoredPosition;
+            target.localScale = Vector3.one;
+            target.localRotation = Quaternion.identity;
+        }
+
+        private static void PositionSlotNumbers(UIInventorySlot[] slots)
         {
             for (int i = 0; i < slots.Length; i++)
             {
@@ -122,23 +196,41 @@ namespace Artisan.Patches
                     continue;
 
                 UpdateSlotNumberText(slot, i + 1);
-                MoveQuantityText(slot);
+
+                TextMeshProUGUI quantityText = HarmonyUtil.GetFieldValue<TextMeshProUGUI>(
+                    slot,
+                    "quantityText"
+                );
+
+                if (quantityText == null)
+                    continue;
+
+                RectTransform textRect = quantityText.GetComponent<RectTransform>();
+
+                if (textRect == null)
+                    continue;
+
+                textRect.anchorMin = new Vector2(0.5f, 0.5f);
+                textRect.anchorMax = new Vector2(0.5f, 0.5f);
+                textRect.pivot = new Vector2(0.5f, 0.5f);
+                textRect.anchoredPosition = SlotNumberPosition;
+
+                quantityText.alignment = TextAlignmentOptions.Center;
             }
         }
 
         private static void UpdateSlotNumberText(UIInventorySlot slot, int number)
         {
-            TMP_Text[] texts =
-                slot.GetComponentsInChildren<TMP_Text>(true);
+            TMP_Text[] texts = slot.GetComponentsInChildren<TMP_Text>(true);
 
-            foreach (TMP_Text text in texts)
+            for (int i = 0; i < texts.Length; i++)
             {
+                TMP_Text text = texts[i];
+
                 if (text == null)
                     continue;
 
-                string value = text.text != null
-                    ? text.text.Trim()
-                    : "";
+                string value = text.text != null ? text.text.Trim() : "";
 
                 int parsed;
 
@@ -152,162 +244,83 @@ namespace Artisan.Patches
             }
         }
 
-        private static void MoveQuantityText(UIInventorySlot slot)
+        private static void PositionLeftHandSlot(
+            UIInventory inventory,
+            RectTransform container,
+            Vector2 slotSize,
+            Transform frameTemplate)
         {
-            TextMeshProUGUI quantityText =
-                HarmonyUtil.GetFieldValue<TextMeshProUGUI>(
-                    slot,
-                    "quantityText"
-                );
-
-            if (quantityText == null)
-                return;
-
-            RectTransform textRect =
-                quantityText.GetComponent<RectTransform>();
-
-            if (textRect == null)
-                return;
-
-            textRect.anchoredPosition += SlotNumberOffset;
-        }
-
-        private static void PositionInventorySlots(UIInventorySlot[] slots, Vector2 cellSize)
-        {
-            Vector2 frameSize = cellSize + SlotFramePadding;
-            Vector2 step = frameSize + SlotVisualSpacing;
-
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (slots[i] == null)
-                    continue;
-
-                RectTransform rect = slots[i].GetComponent<RectTransform>();
-
-                if (rect == null)
-                    continue;
-
-                int row = i / Columns;
-                int col = i % Columns;
-
-                rect.anchorMin = new Vector2(0.5f, 0.5f);
-                rect.anchorMax = new Vector2(0.5f, 0.5f);
-                rect.pivot = new Vector2(0.5f, 0.5f);
-                rect.localScale = Vector3.one;
-
-                rect.anchoredPosition =
-                    GridOffset +
-                    new Vector2(
-                        col * step.x,
-                        -row * step.y
-                    );
-
-                rect.SetSiblingIndex(i);
-            }
-        }
-
-        private static void PositionLeftHandSlot(UIInventory inventory, RectTransform container, Vector2 cellSize)
-        {
-            UIInventorySlot leftHandSlot =
-                HarmonyUtil.GetFieldValue<UIInventorySlot>(
-                    inventory,
-                    "leftHandSlot"
-                );
+            UIInventorySlot leftHandSlot = HarmonyUtil.GetFieldValue<UIInventorySlot>(
+                inventory,
+                "leftHandSlot"
+            );
 
             if (leftHandSlot == null)
                 return;
 
-            RectTransform rect = leftHandSlot.GetComponent<RectTransform>();
+            RectTransform slotRect = leftHandSlot.GetComponent<RectTransform>();
 
-            if (rect == null)
+            if (slotRect == null)
                 return;
 
-            Vector2 frameSize = cellSize + SlotFramePadding;
-            Vector2 step = frameSize + SlotVisualSpacing;
+            Vector2 leftHandPosition = GridOrigin + LeftHandOffset;
 
-            Vector2 leftHandPosition =
-                GridOffset +
-                new Vector2(
-                    -step.x,
-                    -step.y * 0.5f
-                ) +
-                LeftHandExtraOffset;
+            slotRect.SetParent(container, false);
+            SetCentered(slotRect);
+            slotRect.anchoredPosition = leftHandPosition;
+            slotRect.localScale = Vector3.one;
+            slotRect.localRotation = Quaternion.identity;
 
-            rect.SetParent(container, false);
-            rect.anchorMin = new Vector2(0.5f, 0.5f);
-            rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.localScale = Vector3.one;
-            rect.anchoredPosition = leftHandPosition;
-
-            AlignOffhandFrame(inventory, container, leftHandPosition, cellSize);
-
-            rect.SetAsLastSibling();
+            slotRect.SetAsLastSibling();
         }
 
-        private static void AlignOffhandFrame(UIInventory inventory, RectTransform container, Vector2 position, Vector2 cellSize)
+        private static void PositionInputPrompts(UIInventory inventory, RectTransform container)
         {
-            Transform sourceFrame = FindDeepChild(inventory.transform, "OffhandItem");
+            CanvasGroup scrollGroup = HarmonyUtil.GetFieldValue<CanvasGroup>(
+                inventory,
+                "scrollCanvasGroup"
+            );
 
-            if (sourceFrame == null)
+            if (scrollGroup == null)
                 return;
 
-            RectTransform frameRect = sourceFrame as RectTransform;
+            RectTransform promptRect = scrollGroup.transform.parent as RectTransform;
 
-            if (frameRect == null)
+            if (promptRect == null)
                 return;
 
-            frameRect.SetParent(container, false);
-            frameRect.anchorMin = new Vector2(0.5f, 0.5f);
-            frameRect.anchorMax = new Vector2(0.5f, 0.5f);
-            frameRect.pivot = new Vector2(0.5f, 0.5f);
-            frameRect.localScale = Vector3.one;
-            frameRect.localRotation = Quaternion.identity;
-            frameRect.sizeDelta = cellSize + SlotFramePadding;
-            frameRect.anchoredPosition = position + SlotFrameOffset;
-
-            sourceFrame.gameObject.SetActive(true);
-            frameRect.SetAsFirstSibling();
+            promptRect.SetParent(container, false);
+            SetCentered(promptRect);
+            promptRect.localScale = Vector3.one;
+            promptRect.localRotation = Quaternion.identity;
+            promptRect.anchoredPosition = GridOrigin + LeftHandOffset + PromptContainerOffset;
+            promptRect.SetAsLastSibling();
         }
 
-        private static void MoveSelectedItemName(UIInventory inventory, RectTransform container, Vector2 cellSize)
+        private static void PositionSelectedItemName(UIInventory inventory, RectTransform container)
         {
-            TextMeshProUGUI itemName =
-                HarmonyUtil.GetFieldValue<TextMeshProUGUI>(
-                    inventory,
-                    "currentSelectedItemNameText"
-                );
+            TextMeshProUGUI itemName = HarmonyUtil.GetFieldValue<TextMeshProUGUI>(
+                inventory,
+                "currentSelectedItemNameText"
+            );
 
             if (itemName == null)
                 return;
 
-            RectTransform textRect =
-                itemName.GetComponent<RectTransform>();
+            RectTransform textRect = itemName.GetComponent<RectTransform>();
 
             if (textRect == null)
                 return;
 
-            textRect.SetParent(container, false);
-            textRect.anchorMin = new Vector2(0.5f, 0.5f);
-            textRect.anchorMax = new Vector2(0.5f, 0.5f);
-            textRect.pivot = new Vector2(0.5f, 0.5f);
-
-            Vector2 frameSize = cellSize + SlotFramePadding;
-            Vector2 step = frameSize + SlotVisualSpacing;
-
-            float gridWidth =
-                Columns * frameSize.x +
-                (Columns - 1) * SlotVisualSpacing.x;
-
-            float leftX = GridOffset.x;
-            float rightX = GridOffset.x + ((Columns - 1) * step.x);
+            float leftX = GetSlotPosition(0).x;
+            float rightX = GetSlotPosition(Columns - 1).x;
             float centerX = (leftX + rightX) * 0.5f;
+            float width = (rightX - leftX) + 80f;
 
-            textRect.anchoredPosition =
-                new Vector2(centerX, GridOffset.y + NameOffset.y);
-
-            textRect.sizeDelta =
-                new Vector2(gridWidth + 40f, textRect.sizeDelta.y);
+            textRect.SetParent(container, false);
+            SetCentered(textRect);
+            textRect.anchoredPosition = new Vector2(centerX, GridOrigin.y + NameOffset.y);
+            textRect.sizeDelta = new Vector2(width, textRect.sizeDelta.y);
 
             itemName.alignment = TextAlignmentOptions.Center;
             itemName.textWrappingMode = TextWrappingModes.NoWrap;
@@ -319,42 +332,38 @@ namespace Artisan.Patches
 
         private static void DisableLayoutComponents(RectTransform container)
         {
-            LayoutGroup[] layouts =
-                container.GetComponents<LayoutGroup>();
+            LayoutGroup[] layouts = container.GetComponents<LayoutGroup>();
 
-            foreach (LayoutGroup layout in layouts)
+            for (int i = 0; i < layouts.Length; i++)
             {
-                if (layout != null)
-                    layout.enabled = false;
+                if (layouts[i] != null)
+                    layouts[i].enabled = false;
             }
 
-            ContentSizeFitter fitter =
-                container.GetComponent<ContentSizeFitter>();
+            ContentSizeFitter fitter = container.GetComponent<ContentSizeFitter>();
 
             if (fitter != null)
                 fitter.enabled = false;
         }
 
-        private static void HideInventoryBackground(UIInventory inventory, RectTransform container)
+        private static void HideInventoryBackground(UIInventory inventory)
         {
-            Transform root = inventory.transform;
+            Image[] images = inventory.transform.GetComponentsInChildren<Image>(true);
 
-            Image[] images =
-                root.GetComponentsInChildren<Image>(true);
-
-            foreach (Image image in images)
+            for (int i = 0; i < images.Length; i++)
             {
+                Image image = images[i];
+
                 if (image == null)
                     continue;
 
                 if (IsSlotImage(image))
                     continue;
 
-                string name =
-                    image.gameObject.name.ToLowerInvariant();
-
                 if (image.transform.name == "OffhandItem")
                     continue;
+
+                string name = image.gameObject.name.ToLowerInvariant();
 
                 if (name.Contains("panel") ||
                     name.Contains("background") ||
@@ -372,66 +381,14 @@ namespace Artisan.Patches
 
         private static bool IsSlotImage(Image image)
         {
-            UIInventorySlot slot =
-                image.GetComponentInParent<UIInventorySlot>();
-
-            return slot != null;
+            return image.GetComponentInParent<UIInventorySlot>() != null;
         }
 
-        private static void CreateSlotFramesFromOffhandItem(UIInventory inventory, UIInventorySlot[] slots, Vector2 cellSize)
+        private static void SetCentered(RectTransform rect)
         {
-            Transform sourceFrame = FindDeepChild(inventory.transform, "OffhandItem");
-
-            if (sourceFrame == null)
-            {
-                Debug.LogWarning("[Artisan] OffhandItem frame not found.");
-                return;
-            }
-
-            RectTransform sourceRect = sourceFrame as RectTransform;
-
-            if (sourceRect == null)
-                return;
-
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (slots[i] == null)
-                    continue;
-
-                RectTransform slotRect = slots[i].GetComponent<RectTransform>();
-
-                if (slotRect == null || slotRect.parent == null)
-                    continue;
-
-                string frameName = "ArtisanSlotFrame_" + i;
-
-                Transform oldFrame = slotRect.parent.Find(frameName);
-
-                if (oldFrame != null)
-                    Object.Destroy(oldFrame.gameObject);
-
-                GameObject frameObj = Object.Instantiate(sourceFrame.gameObject, slotRect.parent);
-                frameObj.name = frameName;
-
-                RectTransform frameRect = frameObj.GetComponent<RectTransform>();
-
-                if (frameRect == null)
-                    continue;
-
-                frameRect.anchorMin = slotRect.anchorMin;
-                frameRect.anchorMax = slotRect.anchorMax;
-                frameRect.pivot = slotRect.pivot;
-                frameRect.localScale = Vector3.one;
-                frameRect.localRotation = Quaternion.identity;
-
-                frameRect.sizeDelta = cellSize + SlotFramePadding;
-                frameRect.anchoredPosition = slotRect.anchoredPosition + SlotFrameOffset;
-
-                frameObj.SetActive(true);
-
-                frameRect.SetSiblingIndex(slotRect.GetSiblingIndex());
-                slotRect.SetSiblingIndex(frameRect.GetSiblingIndex() + 1);
-            }
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
         }
 
         private static Transform FindDeepChild(Transform parent, string childName)
