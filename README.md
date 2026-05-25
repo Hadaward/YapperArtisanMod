@@ -4,8 +4,6 @@ A quality-of-life and gameplay enhancement mod for YAPYAP focused on improving m
 
 Artisan brings together multiple improvements inspired by existing community mods while addressing limitations, bugs, and performance issues found in previous implementations.
 
----
-
 ## Why Artisan Exists
 
 Artisan was created after discovering several useful community mods that introduced interesting features but also presented limitations, bugs, or multiplayer/performance issues.
@@ -15,8 +13,6 @@ Normally, contributing fixes directly to the original projects would be the pref
 Because of this, Artisan was developed as an independent project focused on improving, reimplementing, and expanding those ideas while maintaining compatibility, configurability, and performance.
 
 This project is intended as a complement to community work and not as criticism of the original authors, whose mods served as inspiration.
-
----
 
 ## Features
 
@@ -34,9 +30,6 @@ Improvements made by Artisan:
 
 - Fully functional in multiplayer
 - Works for all players with Artisan installed
-- Floating damage indicators synchronized correctly
-
----
 
 ### Aero & Teleblast Damage
 
@@ -55,8 +48,6 @@ Artisan improvements:
 - Cleaner implementation
 - Fully configurable
 - Individual spell damage values can be adjusted or disabled
-
----
 
 ### Extra Inventory Slots
 
@@ -77,8 +68,6 @@ Artisan improvements:
 	- Focuses on adding extra slots without breaking the UI, but it does hide the background decoration of the inventory when extra slots are enabled. This is a trade-off to maintain a cohesive UI while adding functionality.
 	- Added shortcut keys for extra slots (4-8) to quickly switch between them
 - Can be disabled entirely
-
----
 
 ## Configuration
 
@@ -101,8 +90,6 @@ BepInEx/config/gamedroit.artisan.cfg
 
 Changes can be made without modifying the mod itself.
 
----
-
 ## Goals
 
 Artisan aims to provide:
@@ -113,8 +100,6 @@ Artisan aims to provide:
 - Modular features
 - Full configurability
 - Compatibility-focused implementations
-
----
 
 ## Installation
 
@@ -127,25 +112,21 @@ Artisan aims to provide:
 BepInEx/config/gamedroit.artisan.cfg
 ```
 
----
-
 ## Credits
 
 ### Inspiration
 
 Health Bar implementation inspired by:
 
-- XiaohaiMod — HealthBar
+- XiaohaiMod â€” HealthBar
 
 Aero damage implementation inspired by:
 
-- ControllerAndHisFriends — AeroWithDamage
+- ControllerAndHisFriends â€” AeroWithDamage
 
 Inventory slot implementation inspired by:
 
-- H4Mods — MoreInventorySlots
-
----
+- H4Mods â€” MoreInventorySlots
 
 ### Author
 
