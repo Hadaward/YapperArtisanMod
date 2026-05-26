@@ -155,14 +155,9 @@ BepInEx/config/gamedroit.artisan.cfg
 
 ### Inspiration
 
-Health Bar:
-https://thunderstore.io/c/yapyap/p/XiaohaiMod/HealthBar/
-
-Aero With Damage:
-https://thunderstore.io/c/yapyap/p/ControllerAndHisFriends/AeroWithDamage/
-
-More Inventory Slots:
-https://thunderstore.io/c/yapyap/p/H4Mods/MoreInventorySlots/
+- Health Bar: https://thunderstore.io/c/yapyap/p/XiaohaiMod/HealthBar/
+- Aero With Damage: https://thunderstore.io/c/yapyap/p/ControllerAndHisFriends/AeroWithDamage/
+- More Inventory Slots: https://thunderstore.io/c/yapyap/p/H4Mods/MoreInventorySlots/
 
 ### Author
 
