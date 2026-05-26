@@ -1,9 +1,9 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using YAPYAP;
 
-namespace Artisan.UI
+namespace Artisan.Features.Monsters
 {
     public sealed class ArtisanEnemyHealthBar : MonoBehaviour
     {

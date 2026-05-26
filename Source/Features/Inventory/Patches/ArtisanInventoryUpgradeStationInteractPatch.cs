@@ -1,7 +1,7 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using YAPYAP;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Inventory
 {
     [HarmonyPatch(typeof(Interactable), "Interact")]
     public static class ArtisanInventoryUpgradeStationInteractPatch

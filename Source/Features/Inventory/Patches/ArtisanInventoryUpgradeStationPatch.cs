@@ -1,11 +1,11 @@
-﻿using Artisan.Localization;
+using Artisan.Localization;
 using HarmonyLib;
 using Mirror;
 using UnityEngine;
 using YAPYAP;
 using FMODUnity;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Inventory
 {
     [HarmonyPatch(typeof(Shop), "OnStartClient")]
     public static class ArtisanInventoryUpgradeStationPatch

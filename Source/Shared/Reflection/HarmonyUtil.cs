@@ -1,4 +1,4 @@
-﻿using Artisan;
+using Artisan;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,9 @@ using System.Reflection;
 using UnityEngine;
 using YAPYAP;
 
-public static class HarmonyUtil
+namespace Artisan.Shared.Reflection
+{
+    public static class HarmonyUtil
 {
     public static void CopyMatchingFieldsIncludingBaseTypes(object source, object target)
     {
@@ -284,4 +286,5 @@ public static class HarmonyUtil
 
         field.SetValue(instance, value);
     }
+}
 }

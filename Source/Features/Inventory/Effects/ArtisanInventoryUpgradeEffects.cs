@@ -1,11 +1,12 @@
-﻿using FMODUnity;
+using Artisan.Shared.Reflection;
+using FMODUnity;
 using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
 using YAPYAP;
 using YAPYAP.Npc.Shopkeeper;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Inventory
 {
     public static class ArtisanInventoryUpgradeEffects
     {

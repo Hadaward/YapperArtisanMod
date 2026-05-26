@@ -1,6 +1,6 @@
-﻿using Artisan.Patches;
+using Artisan.Shared.Reflection;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Spells
 {
     using HarmonyLib;
     using Mirror;

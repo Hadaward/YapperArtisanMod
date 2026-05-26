@@ -1,8 +1,9 @@
-﻿using HarmonyLib;
+using Artisan.Shared.Reflection;
+using HarmonyLib;
 using UnityEngine;
 using YAPYAP;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Inventory
 {
     [HarmonyPatch(typeof(UIInventory), "Update")]
     public static class UIInventoryExtendedHotkeysPatch

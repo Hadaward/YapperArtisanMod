@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -6,7 +6,7 @@ using Mirror;
 using UnityEngine;
 using YAPYAP;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Inventory
 {
     [HarmonyPatch]
     public static class InventoryPersistencePatch

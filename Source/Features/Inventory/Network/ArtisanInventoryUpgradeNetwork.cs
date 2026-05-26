@@ -1,19 +1,19 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using Mirror;
 using Mirror.RemoteCalls;
 using System.Reflection;
 using UnityEngine;
 using YAPYAP;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Inventory
 {
     public static class ArtisanInventoryUpgradeNetwork
     {
         private const string CommandSignature =
-            "System.Void Artisan.Patches.ArtisanInventoryUpgradeNetwork::CmdPurchaseInventoryUpgrade()";
+            "System.Void Artisan.Features.Inventory.ArtisanInventoryUpgradeNetwork::CmdPurchaseInventoryUpgrade()";
 
         private const string TargetRpcSignature =
-            "System.Void Artisan.Patches.ArtisanInventoryUpgradeNetwork::TargetRpcInventoryUpgradePurchased()";
+            "System.Void Artisan.Features.Inventory.ArtisanInventoryUpgradeNetwork::TargetRpcInventoryUpgradePurchased()";
 
         private static readonly int CommandHash = CommandSignature.GetStableHashCode();
         private static readonly int TargetRpcHash = TargetRpcSignature.GetStableHashCode();

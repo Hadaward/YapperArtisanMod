@@ -1,10 +1,11 @@
-﻿using HarmonyLib;
+using Artisan.Shared.Reflection;
+using HarmonyLib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using YAPYAP;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Inventory
 {
     [HarmonyPatch(typeof(UIInventory), "InitializeSlots")]
     public static class UIInventoryGridPatch
@@ -13,7 +14,7 @@ namespace Artisan.Patches
         private const float SelectedItemNameFontSize = 18f;
 
         private static readonly Vector2 GridOrigin = new Vector2(-34f, 20f);
-        private static readonly Vector2 SlotSpacing = new Vector2(46f, 52f);
+        private static readonly Vector2 SlotSpacing = new Vector2(40f, 52f);
 
         private static readonly Vector2 SlotFrameSizeOffset = new Vector2(1f, 1f);
 

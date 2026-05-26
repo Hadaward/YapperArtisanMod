@@ -1,8 +1,9 @@
-﻿using HarmonyLib;
+using Artisan.Shared.Reflection;
+using HarmonyLib;
 using Mirror;
 using YAPYAP;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Inventory
 {
     [HarmonyPatch]
     public static class ArtisanInventoryLockedSlotPatch

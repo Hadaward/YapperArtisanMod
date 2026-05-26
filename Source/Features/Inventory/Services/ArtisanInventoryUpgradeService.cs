@@ -1,11 +1,11 @@
-﻿using YAPYAP;
+using YAPYAP;
 using Mirror;
 using UnityEngine;
 using HarmonyLib;
 using System.Reflection;
 using YAPYAP.Npc.Shopkeeper;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Inventory
 {
     public static class ArtisanInventoryUpgradeService
     {

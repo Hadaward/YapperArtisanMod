@@ -1,4 +1,3 @@
-﻿using Artisan.UI;
 using HarmonyLib;
 using System;
 using System.Reflection;
@@ -7,7 +6,7 @@ using YAPYAP;
 
 using Random = UnityEngine.Random;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Monsters
 {
     [HarmonyPatch]
     public static class NpcHurtboxClientHitFxPatch

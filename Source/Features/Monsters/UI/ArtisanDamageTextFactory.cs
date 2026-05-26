@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using TMPro;
 
-namespace Artisan.UI
+namespace Artisan.Features.Monsters
 {
     public static class ArtisanDamageTextFactory
     {

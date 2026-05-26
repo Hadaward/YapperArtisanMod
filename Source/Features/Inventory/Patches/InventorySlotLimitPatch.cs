@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+using Artisan.Shared.Reflection;
+using HarmonyLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using YAPYAP;
 
-namespace Artisan.Patches
+namespace Artisan.Features.Inventory
 {
     [HarmonyPatch]
     public static class InventorySlotLimitPatch
