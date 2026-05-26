@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Artisan
 {
-    [BepInPlugin("gamedroit.artisan", "Artisan", "1.0.2")]
+    [BepInPlugin("gamedroit.artisan", "Artisan", "1.0.3")]
     public sealed class ArtisanMod : BaseUnityPlugin
     {
         internal new static ManualLogSource Logger { get; private set; }
