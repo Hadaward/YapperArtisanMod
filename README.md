@@ -14,8 +14,6 @@ Because of this, Artisan was developed as an independent project focused on impr
 
 This project exists as a complement to community work and not as criticism of the original authors whose work served as inspiration.
 
----
-
 ## Features
 
 ### Monster Health Bars + Multiplayer Damage Indicators
@@ -27,8 +25,6 @@ Improvements:
 * Proper multiplayer synchronization
 * Visible to all players with Artisan installed
 * More stable implementation
-
----
 
 ### Aero & Teleblast Damage
 
@@ -42,8 +38,6 @@ Features:
 * Individual spell damage values
 * Can be configured independently
 * Can be disabled completely
-
----
 
 ### Extended Inventory Slots
 
@@ -62,8 +56,6 @@ Features:
   * Slots 4–8
 * Improved inventory UI behavior
 * Can be disabled completely
-
----
 
 ### Backpack Upgrade System
 
@@ -90,8 +82,6 @@ Locked slots include:
 * Hotkey protection
 * Scroll selection protection
 * Drag/drop protection
-
----
 
 ## Configuration
 
@@ -121,8 +111,6 @@ BepInEx/config/gamedroit.artisan.cfg
 
 Changes can be made without modifying the mod itself.
 
----
-
 ## Goals
 
 Artisan aims to provide:
@@ -133,8 +121,6 @@ Artisan aims to provide:
 * Modular features
 * Full configurability
 * Compatibility-focused implementations
-
----
 
 ## Installation
 
@@ -148,8 +134,6 @@ Configuration path:
 ```text
 BepInEx/config/gamedroit.artisan.cfg
 ```
-
----
 
 ## Credits
 
