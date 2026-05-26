@@ -12,6 +12,10 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+	
+	<GamePath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP</GamePath>
+	<GameManagedPath>$(GamePath)\yapyap_Data\Managed</GameManagedPath>
+	<BepInExCorePath>$(GamePath)\BepInEx\core</BepInExCorePath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,79 +44,79 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>$(BepInExCorePath)\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(GameManagedPath)\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\BepInEx\core\BepInEx.dll</HintPath>
+      <HintPath>$(BepInExCorePath)\BepInEx.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FMODUnity, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\FMODUnity.dll</HintPath>
+      <HintPath>$(GameManagedPath)\FMODUnity.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Mirror">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\Mirror.dll</HintPath>
+      <HintPath>$(GameManagedPath)\Mirror.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PhotonRealtime">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\PhotonRealtime.dll</HintPath>
+      <HintPath>$(GameManagedPath)\PhotonRealtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PhotonVoice">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\PhotonVoice.dll</HintPath>
+      <HintPath>$(GameManagedPath)\PhotonVoice.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>$(GameManagedPath)\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(GameManagedPath)\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>$(GameManagedPath)\UnityEngine.AnimationModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>$(GameManagedPath)\UnityEngine.AssetBundleModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(GameManagedPath)\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(GameManagedPath)\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>$(GameManagedPath)\UnityEngine.PhysicsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>$(GameManagedPath)\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(GameManagedPath)\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP\yapyap_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>$(GameManagedPath)\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
