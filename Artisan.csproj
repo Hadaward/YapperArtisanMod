@@ -12,10 +12,9 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-	
-	<GamePath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP</GamePath>
-	<GameManagedPath>$(GamePath)\yapyap_Data\Managed</GameManagedPath>
-	<BepInExCorePath>$(GamePath)\BepInEx\core</BepInExCorePath>
+    <GamePath>..\..\..\..\Programas\Steam\steamapps\common\YAPYAP</GamePath>
+    <GameManagedPath>$(GamePath)\yapyap_Data\Managed</GameManagedPath>
+    <BepInExCorePath>$(GamePath)\BepInEx\core</BepInExCorePath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,25 +54,20 @@
       <HintPath>$(BepInExCorePath)\BepInEx.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="FMODUnity, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="FMODUnity">
       <HintPath>$(GameManagedPath)\FMODUnity.dll</HintPath>
-      <Private>False</Private>
+	  <Private>False</Private>
     </Reference>
     <Reference Include="Mirror">
       <HintPath>$(GameManagedPath)\Mirror.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="PhotonRealtime">
-      <HintPath>$(GameManagedPath)\PhotonRealtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="PhotonVoice">
-      <HintPath>$(GameManagedPath)\PhotonVoice.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="Unity.InputSystem">
+      <HintPath>$(GameManagedPath)\Unity.InputSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(GameManagedPath)\Unity.TextMeshPro.dll</HintPath>
@@ -85,19 +79,10 @@
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
       <HintPath>$(GameManagedPath)\UnityEngine.AnimationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>$(GameManagedPath)\UnityEngine.AssetBundleModule.dll</HintPath>
-      <Private>False</Private>
+	  <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(GameManagedPath)\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GameManagedPath)\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
@@ -121,7 +106,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    </ItemGroup>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Source\ArtisanMod.cs" />
@@ -135,6 +120,7 @@
     <Compile Include="Source\Features\Inventory\Patches\InventorySlotLimitPatch.cs" />
     <Compile Include="Source\Features\Inventory\Patches\UIInventoryExtendedHotkeysPatch.cs" />
     <Compile Include="Source\Features\Inventory\Services\ArtisanInventoryUpgradeService.cs" />
+    <Compile Include="Source\Features\Inventory\UI\ArtisanInventoryHotkeySettingsPatch.cs" />
     <Compile Include="Source\Features\Inventory\UI\ArtisanLockedSlotOverlayPatch.cs" />
     <Compile Include="Source\Features\Inventory\UI\UIInventoryGridPatch.cs" />
     <Compile Include="Source\Features\Monsters\Patches\NpcHurtboxClientHitFxPatch.cs" />

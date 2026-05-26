@@ -1,6 +1,7 @@
 using Artisan.Shared.Reflection;
 using HarmonyLib;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using YAPYAP;
 
 namespace Artisan.Features.Inventory
@@ -8,41 +9,33 @@ namespace Artisan.Features.Inventory
     [HarmonyPatch(typeof(UIInventory), "Update")]
     public static class UIInventoryExtendedHotkeysPatch
     {
-        private static readonly KeyCode[] SlotKeys =
-        {
-            KeyCode.Alpha4,
-            KeyCode.Alpha5,
-            KeyCode.Alpha6,
-            KeyCode.Alpha7,
-            KeyCode.Alpha8
-        };
-
         private static void Postfix(UIInventory __instance)
         {
             if (ArtisanMod.EnableExtendedInventorySlots == null ||
                 !ArtisanMod.EnableExtendedInventorySlots.Value)
                 return;
 
-            PawnInventory playerInventory =
-                HarmonyUtil.GetFieldValue<PawnInventory>(
-                    __instance,
-                    "_playerInventory"
-                );
+            PawnInventory playerInventory = HarmonyUtil.GetFieldValue<PawnInventory>(
+                __instance,
+                "_playerInventory"
+            );
 
             if (playerInventory == null)
                 return;
 
             int maxSlots = InventorySlotLimitPatch.GetMaxInventorySlots();
 
-            for (int i = 3; i < maxSlots && i < 8; i++)
+            for (int slotIndex = 3; slotIndex < maxSlots; slotIndex++)
             {
-                if (!ArtisanInventoryUpgradeService.IsSlotUnlocked(playerInventory, i))
+                if (!ArtisanInventoryUpgradeService.IsSlotUnlocked(playerInventory, slotIndex))
                     continue;
 
-                if (!UnityEngine.Input.GetKeyDown(SlotKeys[i - 3]))
+                InputAction action = ArtisanInventoryHotkeyManager.GetSlotAction(slotIndex);
+
+                if (action == null || !action.WasPressedThisFrame())
                     continue;
 
-                playerInventory.CmdSelectSlotWithMainHand(i);
+                playerInventory.CmdSelectSlotWithMainHand(slotIndex);
                 return;
             }
         }
